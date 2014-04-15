@@ -60,7 +60,7 @@ void terminal_initialize(void)
 	terminal_row = 0;
 	terminal_column = 0;
 	terminal_color = make_color(COLOR_LIGHT_GREY, COLOR_BLACK);
-	terminal_buffer = (unsigned int *) 0xB8000;
+	terminal_buffer = (unsigned int  *) 0xB8000;
 	for ( unsigned int y = 0; y < VGA_HEIGHT; y++ )
 	{
 		for ( unsigned int x = 0; x < VGA_WIDTH; x++ )
@@ -69,8 +69,8 @@ void terminal_initialize(void)
 			terminal_buffer[index] = make_vgaentry(' ', terminal_color);
 		}
 	}
-}
 
+}
 
 
 void terminal_putentryat(char c, unsigned int color, unsigned int x, unsigned int y)
@@ -104,6 +104,9 @@ void terminal_writestring(const char * string)
 void kmain(void)
 {
 	terminal_initialize();
-	terminal_writestring("aaa");
+
+	terminal_writestring("testing");	
+
+	
 	return;
 }
