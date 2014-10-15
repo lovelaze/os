@@ -1,4 +1,5 @@
 ;; kernel.asm
+;;
 bits 32 						; nasm directive - 32 bit
 section .text				; here begins the text section
 	; multiboot spec
