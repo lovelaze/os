@@ -1,21 +1,30 @@
-all: kernel
+AS = i686-elf-as
+CC = i686-elf-gcc
+CXX = i686-elf-g++
 
-kasm.o: kernel.asm
-	nasm -f elf32 kernel.asm -o kasm.o
+all: os.bin
 
-kc.o: kernel.c
-	gcc -m32 -c kernel.c -o kc.o -nostdinc -std=c99
+boot.o: src/boot.s
+	$(AS) src/boot.s -o bin/boot.o
 
-kernel: kasm.o kc.o link.ld
-	ld -m elf_i386 -T link.ld -o kernel kasm.o kc.o
+kernel.o: src/kernel.c
+	$(CC) -c src/kernel.c -o bin/kernel.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra
 
-run: kernel
-	qemu-system-i386 -kernel kernel
+os.bin: linker.ld kernel.o boot.o
+	$(CC) -T linker.ld -o os.bin -ffreestanding -O2 -nostdlib bin/boot.o bin/kernel.o -lgcc
+
+iso: isodir/boot/grub/grub.cfg os.bin
+	cp os.bin isodir/boot/os.bin
+	grub-mkrescue -o os.iso isodir
+
+run:
+	qemu-system-i386 -kernel os.bin
 
 .PHONY: clean
 
 clean:
-	rm -rf *.o
+	rm -rf *.o *.bin *.iso
+	rm -rf bin/*.o
 
 
 #gcc -m32 -c kernel.c -o kc.o -nostdinc -std=c99
