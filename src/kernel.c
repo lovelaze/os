@@ -82,20 +82,27 @@ void terminal_putentryat(char c, unsigned int color, unsigned int x, unsigned in
 void terminal_putchar(char c)
 {
 	terminal_putentryat(c, terminal_color, terminal_column, terminal_row);
-	if (++terminal_column == VGA_WIDTH)
+
+	if (++terminal_column+1 == VGA_WIDTH)
 	{
 		terminal_column = 0;
-		if (++terminal_row == VGA_HEIGHT )
+		
+		if (++terminal_row+1 == VGA_HEIGHT )
 		{
 			terminal_row = 0;
+
 		}
 	}
+
+	
+	
+
 }
 
 void terminal_writestring(const char * string)
 {
 	unsigned int len = strlen(string);
-	for (unsigned int i = 0; i < len; i++) {
+	for (unsigned int i = 0; i < len; ++i) {
 		terminal_putchar(string[i]);
 	}
 }
@@ -105,7 +112,7 @@ void kmain(void)
 {
 	terminal_initialize();
 
-	terminal_writestring("testing");	
+	terminal_writestring("bajs");	
 
 	
 	return;
